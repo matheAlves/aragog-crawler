@@ -1,5 +1,5 @@
 # aragog-crawler
-python web crawler for the wizardingworld.com website
+python web crawler for the wizardingworld.com website (in development)
 
 # curent features
 scrapes for urls of j.k. rowling originals

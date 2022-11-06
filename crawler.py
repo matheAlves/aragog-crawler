@@ -8,7 +8,11 @@ def fetch_content() -> str:
         response.raise_for_status()
     except (requests.HTTPError, requests.ReadTimeout):
         return ""
-    return BeautifulSoup(response.content, 'html.parser').prettify()
+    return response.content
+
+def extract_content_with_soup(content):
+    soup = BeautifulSoup(content, 'html.parser')
+    return soup.find(id="__NEXT_DATA__").prettify()
 
 def extract_urls(content: str) -> list[str]:
     selector = Selector(content)

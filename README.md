@@ -1,4 +1,4 @@
-# ragog-crawler
+# aragog-crawler
 python web crawler for the wizardingworld.com website (in development)
 
 # Current features

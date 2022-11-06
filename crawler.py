@@ -1,5 +1,6 @@
 import requests
 from parsel import Selector
+from bs4 import BeautifulSoup
 
 def fetch_content() -> str:
     try:
@@ -7,8 +8,7 @@ def fetch_content() -> str:
         response.raise_for_status()
     except (requests.HTTPError, requests.ReadTimeout):
         return ""
-    else:
-        return response.text
+    return BeautifulSoup(response.content, 'html.parser').prettify()
 
 def extract_urls(content: str) -> list[str]:
     selector = Selector(content)

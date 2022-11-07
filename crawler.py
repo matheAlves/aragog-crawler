@@ -2,6 +2,8 @@ import requests
 from parsel import Selector
 from bs4 import BeautifulSoup
 
+result = []
+
 
 def fetch_content(url):
     try:
@@ -11,27 +13,32 @@ def fetch_content(url):
         return ""
     return response
 
+
 # it is necessary to find a way to scroll the page for all the url to be scraped
 def extract_urls(content):
     selector = Selector(content.text)
-    return selector.css("div.Hub_root__qduRu a::attr(href)").getall()
+    urls = selector.css("div.Hub_root__qduRu a::attr(href)").getall()
+    urls.pop(0)
+    return urls
+
 
 def browse_pages(urls):
-    BASE_URL = 'https://www.wizardingworld.com'
-    next_page = urls[0]
+    BASE_URL = "https://www.wizardingworld.com"
 
     try:
-        for index, url in enumerate(urls, start=1):
-            content = fetch_content(BASE_URL + next_page)
-            soup = BeautifulSoup(content.content, 'html.parser')
+        for url in urls:
+            content = fetch_content(BASE_URL + url)
+            soup = BeautifulSoup(content.content, "html.parser")
             title = soup.find(class_="ArticleHero_title__cOam6").text
-            print(title)
-            next_page = urls[index]
-    except IndexError:
-        print("end of list")
+            texts = soup.find(class_="ArticleNewsFeature_articleBody__1chXE")
+            for span in texts.find_all("span"):
+                span.decompose()
+            result.append({"title": title, "text": texts.get_text(strip=True)})
+    except Exception as err:
+        print(err.args)
 
-def init():
-    INITIAL_URL = 'https://www.wizardingworld.com/writing-by-jk-rowling'
+
+if __name__ == "__main__":
+    INITIAL_URL = "https://www.wizardingworld.com/writing-by-jk-rowling"
     content = fetch_content(INITIAL_URL)
     urls = extract_urls(content)
-    browse_pages(urls)

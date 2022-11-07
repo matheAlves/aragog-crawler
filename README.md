@@ -6,7 +6,10 @@ Scraps content from each of J.K. Rowling original writings from https://www.wiza
 ![example](./dicts.png)
 
 # Usage
-Simply call the crawl() method from crawler.py and it will return a list of dictionaries containing the 'title' and 'text' for each of the writings.
+## Install Dependencies
+`python -m pip install -r requirements.txt`
+
+Then simply call the crawl() method from crawler.py and it will return a list of dictionaries containing the 'title' and 'text' for each of the writings.
 
 # Known Problems
 When the https://www.wizardingworld.com/writing-by-jk-rowling/ page is first rendered it doesn't load all of the necessary urls, but does so as the page is scrolled down.

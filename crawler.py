@@ -6,8 +6,8 @@ def fetch_content(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
-    except (requests.HTTPError, requests.ReadTimeout):
-        return ""
+    except Exception as err:
+        print(err.args)
     return response
 
 
@@ -22,7 +22,6 @@ def extract_urls(content):
 def extract_content(urls):
     result = []
     BASE_URL = "https://www.wizardingworld.com"
-
     try:
         for url in urls:
             first_word = ''

@@ -2,9 +2,6 @@ import requests
 from parsel import Selector
 from bs4 import BeautifulSoup
 
-result = []
-
-
 def fetch_content(url):
     try:
         response = requests.get(url)
@@ -22,23 +19,32 @@ def extract_urls(content):
     return urls
 
 
-def browse_pages(urls):
+def extract_content(urls):
+    result = []
     BASE_URL = "https://www.wizardingworld.com"
 
     try:
         for url in urls:
+            first_word = ''
             content = fetch_content(BASE_URL + url)
             soup = BeautifulSoup(content.content, "html.parser")
             title = soup.find(class_="ArticleHero_title__cOam6").text
-            texts = soup.find(class_="ArticleNewsFeature_articleBody__1chXE")
-            for span in texts.find_all("span"):
-                span.decompose()
-            result.append({"title": title, "text": texts.get_text(strip=True)})
+            content = soup.find(class_="ArticleNewsFeature_articleBody__1chXE")
+            extract = [span.extract().text for span in content.find_all("span")]
+            if extract:
+                first_word = extract[1]
+                text = first_word + ' ' + content.get_text(strip=True)
+            else:
+                text = content.get_text(strip=True)
+            result.append({"title": title, "text": text})
     except Exception as err:
         print(err.args)
+    return result
 
-
-if __name__ == "__main__":
+def crawl():
     INITIAL_URL = "https://www.wizardingworld.com/writing-by-jk-rowling"
     content = fetch_content(INITIAL_URL)
     urls = extract_urls(content)
+    return extract_content(urls)
+
+    

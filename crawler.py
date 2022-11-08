@@ -4,10 +4,6 @@ import requests
 import time
 from bs4 import BeautifulSoup
 
-INITIAL_URL = "https://www.wizardingworld.com/writing-by-jk-rowling"
-browser = webdriver.Chrome()
-
-
 def fetch_content(url):
     try:
         response = requests.get(url)
@@ -16,8 +12,7 @@ def fetch_content(url):
         print(err.args)
     return response
 
-
-def extract_urls():
+def extract_urls(browser):
     urls = [
         url.get_attribute("href")
         for url in browser.find_element(By.CLASS_NAME, "Hub_root__qduRu").find_elements(
@@ -26,44 +21,31 @@ def extract_urls():
     ]
     return urls
 
-
-def scroll():
+def scroll_page():
+    browser = webdriver.Chrome()
     browser.get("https://www.wizardingworld.com/writing-by-jk-rowling")
+    curr_urls = extract_urls(browser)
+    print("fetching urls...")
+    while True:
+        browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        next_urls = extract_urls(browser)
+        if len(next_urls) > len(curr_urls):
+            curr_urls = next_urls
+            pass
+        elif len(next_urls) == len(curr_urls):
+            break
+    curr_urls.pop(0)
+    return curr_urls
 
-
-    print(len(urls))
-    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
-    urls = extract_urls()
-    print(len(urls))
-    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
-    urls = extract_urls()
-    print(len(urls))
-
-    # urls = selector.css("div.Hub_root__qduRu a::attr(href)").getall()
-    # urls.pop(0)
-    # return urls
-
-
-# current_urls = extract_urls(fetch_content(INITIAL_URL))
-
-# while True:
-#     def scroll_page():
-
-#         browser.get("https://www.wizardingworld.com/writing-by-jk-rowling")
-#         browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-# it is necessary to find a way to scroll the page for all the url to be scraped
-
-
-def extract_content(urls):
+def extract_content():
+    urls = scroll_page()
+    print("fetching content...")
     result = []
-    BASE_URL = "https://www.wizardingworld.com"
     try:
         for url in urls:
             first_word = ""
-            content = fetch_content(BASE_URL + url)
+            content = fetch_content(url)
             soup = BeautifulSoup(content.content, "html.parser")
             title = soup.find(class_="ArticleHero_title__cOam6").text
             content = soup.find(class_="ArticleNewsFeature_articleBody__1chXE")

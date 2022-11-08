@@ -9,15 +9,15 @@ Scraps content from each of J.K. Rowling original writings from https://www.wiza
 ## Install Dependencies
 `python -m pip install -r requirements.txt`
 
-Then simply call the crawl() method from crawler.py and it will return a list of dictionaries containing the 'title' and 'text' for each of the writings.
+Then simply call the extract_content() method from crawler.py and it should return a list of dictionaries containing the 'title' and 'text' for each of the writings (there are 94 of november 2022)
 
-# Known Problems
-When the https://www.wizardingworld.com/writing-by-jk-rowling/ page is first rendered it doesn't load all of the necessary urls, but does so as the page is scrolled down.
-I am studying a way to automate that behavior.
+You need to have Selenium browser driver for Chrome installed
+(https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/)
 
 # Reference
 [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)  
 [Real Python](https://realpython.com/beautiful-soup-web-scraper-python/)  
+[Selenium with Python](https://selenium-python.readthedocs.io/index.html)
 [Wizarding World Website](https://www.wizardingworld.com/)
 
 I don't own any of the content scraped. This project is for educational purposes only.

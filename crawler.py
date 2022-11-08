@@ -40,7 +40,8 @@ def scroll_page():
 
 def extract_content():
     urls = scroll_page()
-    print("fetching content...")
+
+    print(f"{len(urls)} found\nfetching content...")
     result = []
     try:
         for url in urls:

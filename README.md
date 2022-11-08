@@ -13,7 +13,7 @@ Then simply call the crawl() method from crawler.py and it will return a list of
 
 # Known Problems
 When the https://www.wizardingworld.com/writing-by-jk-rowling/ page is first rendered it doesn't load all of the necessary urls, but does so as the page is scrolled down.
-I am studying a way to automate that behavior.
+Selenium is being implemented to automate that behavior.
 
 # Reference
 [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)  
